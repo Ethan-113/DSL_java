@@ -1,0 +1,47 @@
+value name,age,id
+
+### 这是第一个注释，下面声明第一个动作
+action first
+output "欢迎参加暑期夏令营选拔，请问您的姓名是："
+user_input 10 name
+jump:
+    if timeout to wait()
+    else id()
+end
+
+action wait
+output "抱歉您闲置时间过长，为保其他同学的参加，已自动退出"
+exit
+
+action id
+output "好的#name#同学，请问您的学号是多少："
+user_input 10 id
+jump:
+    if timeout to wait()
+    else age()
+end
+
+action age
+output "好的#name#同学，您的学号是：#id#，请问您是几年级"
+user_input 10 age
+jump:
+    if timeout to wait()
+    if "一" to success(0)
+    else false()
+end
+
+action false
+output "抱歉，未开设该年级的夏令营，请重新输入年级"
+user_input 10 age
+jump:
+    if timeout to wait()
+    if "一" to success(0)
+    else false()
+end
+
+action success
+output "好的#name#同学，已为您申请，请核对信息"
+output "学号：#id#"
+output "具体信息：#age#"
+output "请等待进一步通知"
+exit

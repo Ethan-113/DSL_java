@@ -1,0 +1,47 @@
+value man=先生,woman=女士
+
+action welcome
+output "您好#man#/#woman#，欢迎致电本公司投诉电话"
+user_input 10
+jump:
+	if timeout to silence()
+	if "投诉" to complain()
+	else exception()
+end
+
+action complain
+output "请问您认为我们有哪些可以改进的地方"
+user_input 10
+jump:
+	if timeout to silence()
+	else complain(3)
+end
+output "感谢您指出，我们会做的更好，还有其他意见吗"
+user_input 10
+jump:
+	if timeout to silence()
+	if "没有" to exit()
+	else complain(3)
+end
+
+action exception
+output "抱歉，本客服暂不支持该服务，请致电其他部门，输入任意返回第一级，或者可以直接退出"
+user_input 10
+jump:
+    if timeout to silence()
+    if "退出" to exit()
+	else welcome()
+end
+
+action silence
+output "由于长时间无操作，进入休眠状态，输入任意键唤醒，或是直接退出（10秒后自动退出）"
+user_input 10
+jump:
+    if timeout to exit()
+    if "退出" to exit()
+    else welcome()
+end
+
+action exit
+output "感谢您的致电，再见"
+exit
